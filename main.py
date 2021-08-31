@@ -196,7 +196,7 @@ def add_new_post():
                             subtitle=form.subtitle.data,
                             body=form.body.data,
                             img_url=form.img_url.data,
-                            author=current_user.name,
+                            author=current_user,
                             date=date.today().strftime("%B %d, %Y")
                             )
         db.session.add(new_post)
@@ -213,7 +213,7 @@ def edit_post(post_id):
         title=post.title,
         subtitle=post.subtitle,
         img_url=post.img_url,
-        author=current_user.name,
+        author=current_user,
         body=post.body
     )
     if edit_form.validate_on_submit():
