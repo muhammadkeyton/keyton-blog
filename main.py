@@ -196,13 +196,13 @@ def add_new_post():
                             subtitle=form.subtitle.data,
                             body=form.body.data,
                             img_url=form.img_url.data,
-                            author_id=current_user.name,
+                            author_id=current_user,
                             date=date.today().strftime("%B %d, %Y")
                             )
         db.session.add(new_post)
         db.session.commit()
         return redirect(url_for("get_all_posts"))
-    return render_template("make-post.html", form=form,logged_in=current_user.is_authenticated)
+    return render_template("make-post.html", form=form)
 
 
 @app.route("/edit-post/<int:post_id>",methods=["GET","POST"])
@@ -224,7 +224,7 @@ def edit_post(post_id):
         db.session.commit()
         return redirect(url_for("show_post", post_id=post.id))
 
-    return render_template("make-post.html", form=edit_form,logged_in=current_user.is_authenticated)
+    return render_template("make-post.html", form=edit_form,is_edit=True)
 
 
 @app.route("/delete/<int:post_id>")
