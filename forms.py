@@ -1,8 +1,15 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
-from wtforms.validators import DataRequired, URL
+from wtforms.validators import DataRequired, URL,InputRequired,ValidationError
 from flask_ckeditor import CKEditorField
 
+def password_check(form,field):
+    if len(field.data) < 8:
+        raise ValidationError('password must be atleast 8 characters long.')
+
+def email_check(form,field):
+    if "@" not in field.data:
+        raise ValidationError("Invalid email address make sure you type in a real email address.eg(must contain '@')")
 ##WTForm
 class CreatePostForm(FlaskForm):
     title = StringField("Blog Post Title", validators=[DataRequired()])
@@ -12,8 +19,8 @@ class CreatePostForm(FlaskForm):
     submit = SubmitField("Submit Post")
 
 class RegisterForm(FlaskForm):
-    email = StringField("Email", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
+    email = StringField("Email", validators=[InputRequired,email_check])
+    password = PasswordField("Password", validators=[InputRequired(), password_check])
     name = StringField("Name", validators=[DataRequired()])
     submit = SubmitField("Register")
 
