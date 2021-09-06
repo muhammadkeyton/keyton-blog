@@ -12,7 +12,7 @@ from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import CreatePostForm
 from flask_gravatar import Gravatar
-
+import smtplib
 
 from sqlalchemy import Table, Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
@@ -181,10 +181,31 @@ def show_post(post_id):
 def about():
     return render_template("about.html")
 
-
-@app.route("/contact")
+my_email="muhammadkeyton@gmail.com"
+bot_email = os.environ.get("bot_email")
+bot_pass = os.environ.get("bot_pass")
+@app.route("/contact",methods=["GET","POST"])
 def contact():
-    return render_template("contact.html", current_user=current_user)
+    if request.method == "POST":
+        name = request.form.get("name")
+        email = request.form.get("email")
+        number = request.form.get("number")
+        message = request.form.get("message")
+        # print(name)
+        # print(email)
+        # print(number)
+        # print(message)
+        with smtplib.SMTP("smtp.gmail.com") as connection:
+            connection.starttls()
+            connection.login(user=bot_email,password=bot_pass)
+            connection.sendmail(from_addr=bot_email,to_addrs=my_email,
+                                msg=f"Subject:New message from {name}\n\n"
+                                    f"name:{name}\n"
+                                    f"email:{email}\n"
+                                    f"number:{number}\n"
+                                    f"message:{message}")
+        return render_template("contact.html",sent=True)
+    return render_template("contact.html", current_user=current_user,sent=False)
 
 
 @app.route("/new-post",methods=["GET","POST"])

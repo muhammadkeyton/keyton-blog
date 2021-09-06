@@ -16,7 +16,6 @@ $(function() {
       // Check for white space in name for Success/Fail message
       if (firstName.indexOf(' ') >= 0) {
         firstName = name.split(' ').slice(0, -1).join(' ');
-      email = "muhammadkeyton@gmail.com";}
       $this = $("#sendMessageButton");
       $this.prop("disabled", true); // Disable submit button until AJAX call is complete to prevent duplicate messages
       $.ajax({
